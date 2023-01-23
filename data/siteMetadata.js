@@ -1,7 +1,7 @@
 const siteMetadata = {
   title: 'Next.js Starter Blog',
   author: 'Ari Rosenzweig',
-  headerTitle: "Ari's Site",
+  headerTitle: "Ari Rosenzweig",
   description: 'Ari Rosenzweig Personal Website',
   language: 'en-us',
   theme: 'system', // system, dark or light

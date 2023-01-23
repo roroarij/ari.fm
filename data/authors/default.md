@@ -5,7 +5,7 @@ occupation: Software Engineer
 company: 
 email: rosenarij@gmail.com
 twitter: https://twitter.com/arirosenzweig
-linkedin: https://www.linkedin.com
+linkedin: https://www.linkedin.com/arirosenzweig
 github: https://github.com/roroarij
 ---
 

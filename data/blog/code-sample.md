@@ -1,65 +1,38 @@
 ---
-title: Writing a Performant Webcrawler in Javascript
-date: '2016-09-07'
-tags: ['javascript', 'webcrawling', 'performance']
+title: Sample .md file
+date: '2016-03-08'
+tags: ['markdown', 'code', 'features']
 draft: false
-summary: A tutorial on writing a performant webcrawler in javascript, including code examples and explanations.
+summary: Example of a markdown file with code blocks and syntax highlighting
 ---
 
-Webcrawling, also known as web scraping, is the process of extracting data from a website. It can be a useful tool for data analysis, lead generation, and price comparison. However, it can also be a taxing process on both the webcrawler and the website being crawled. In this tutorial, we will go over how to write a performant webcrawler in javascript that is both efficient and respectful to the website being crawled.
+A sample post with markdown.
 
+## Inline Highlighting
 
-## Code
-The first step in creating a webcrawler is to set up the basic structure of the script. We will be using the request and cheerio libraries to make HTTP requests and parse the HTML of the website, respectively.
+Sample of inline highlighting `sum = parseInt(num1) + parseInt(num2)`
 
-```javascript
-const request = require('request');
-const cheerio = require('cheerio');
-```
-Next, we will set up the function that will handle the webcrawling. The function will take in a URL as a parameter and use the request library to make an HTTP GET request to that URL.
+## Code Blocks
+
+Some Javascript code
 
 ```javascript
-function webcrawl(url) {
-    request(url, (error, response, html) => {
-        if (!error && response.statusCode == 200) {
-            // success
-        }
-    });
-}
+var num1, num2, sum
+num1 = prompt('Enter first number')
+num2 = prompt('Enter second number')
+sum = parseInt(num1) + parseInt(num2) // "+" means "add"
+alert('Sum = ' + sum) // "+" means combine into a string
 ```
-Once the request is successful, we will use the cheerio library to parse the HTML and extract the data we need. In this example, we will extract all the links on the page.
 
-```javascript
-function webcrawl(url) {
-    request(url, (error, response, html) => {
-        if (!error && response.statusCode == 200) {
-            const $ = cheerio.load(html);
-            $('a').each((i, link) => {
-                console.log($(link).attr('href'));
-            });
-        }
-    });
-}
+Some Python code 🐍
+
+```python
+def fib():
+    a, b = 0, 1
+    while True:            # First iteration:
+        yield a            # yield 0 to start with and then
+        a, b = b, a + b    # a will now be 1, and b will also be 1, (0 + 1)
+
+for index, fibonacci_number in zip(range(10), fib()):
+     print('{i:3}: {f:3}'.format(i=index, f=fibonacci_number))
 ```
-To make sure we are not overloading the website with requests, we will implement a delay between requests using the setTimeout function.
-
-```javascript
-function webcrawl(url) {
-    request(url, (error, response, html) => {
-        if (!error && response.statusCode == 200) {
-            const $ = cheerio.load(html);
-            $('a').each((i, link) => {
-                console.log($(link).attr('href'));
-                setTimeout(() => {
-                    webcrawl($(link).attr('href'));
-                }, 1000);
-            });
-        }
-    });
-}
-```
-## Explanation
-The code above sets up a basic webcrawler that makes HTTP GET requests to a given URL and extracts all the links on the page. The request library is used to make the HTTP request and the cheerio library is used to parse the HTML and extract the data. The setTimeout function is used to implement a delay between requests to avoid overloading the website.
-
-## Conclusion
-Writing a performant webcrawler in javascript is relatively simple with the use of libraries like request and cheerio. However it is important to keep in mind the performance and ethical

@@ -26,6 +26,12 @@ const projectsData = [
     href: '/blog/going-serverless-1',
   },
   {
+    title: 'Going Serverless Part 2: Using Cloudflare Workers as a reverse proxy',
+    description: `Using Cloudflare worker scripts to augment existing applications`,
+    imgSrc: '/static/images/gpt.webp',
+    href: '/blog/going-serverless-1',
+  },
+  {
     title: 'Gis.sh | Automatic GIS Layer Feature Extraction',
     description: `Scraping County GIS endpoints for parcel data and more.`,
     imgSrc: '/static/images/gpt.webp',

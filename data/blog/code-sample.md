@@ -62,4 +62,4 @@ function webcrawl(url) {
 The code above sets up a basic webcrawler that makes HTTP GET requests to a given URL and extracts all the links on the page. The request library is used to make the HTTP request and the cheerio library is used to parse the HTML and extract the data. The setTimeout function is used to implement a delay between requests to avoid overloading the website.
 
 ## Conclusion
-Writing a performant webcrawler in javascript is relatively simple with the use of libraries like request and cheerio. However, it is important to keep in mind the performance and ethical
+Writing a performant webcrawler in javascript is relatively simple with the use of libraries like request and cheerio. However it is important to keep in mind the performance and ethical

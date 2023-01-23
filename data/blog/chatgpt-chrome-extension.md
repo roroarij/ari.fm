@@ -1,6 +1,6 @@
 ---
 title: Generating a Chrome Extension with ChatGPT
-date: '2021-12-01'
+date: '2022-12-10'
 tags: ['chrome extension', 'javascript', 'code generation']
 draft: false
 summary: Learn how to generate a chrome extension using OpenAI's ChatGPT model, and see the code that it produces.

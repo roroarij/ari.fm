@@ -8,12 +8,10 @@ const projectsData = [
     href: 'https://www.google.com',
   },
   {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/the-time-machine',
+    title: 'ChatGPT Chrome Extension',
+    description: `Building an email-extracting chrome extension using OpenAI's ChatGPT model.`,
+    imgSrc: 'https://i0.wp.com/bdtechtalks.com/wp-content/uploads/2022/12/openai-chatgpt.jpg?resize=696%2C435&ssl=1',
+    href: '/blog/chatgpt-chrome-extension',
   },
 ]
 

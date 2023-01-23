@@ -9,8 +9,8 @@ linkedin: https://www.linkedin.com
 github: https://github.com/roroarij
 ---
 
-Ari Rosenzweig is a professor of atmospheric sciences at the Stanford AI Lab. His research interests includes complexity modelling of tailwinds, headwinds and crosswinds.
+Ari Rosenzweig is an experienced software engineer with a diverse skill set and a passion for programming and real estate. Ari has extensive experience in project management, devops, and building efficient ETL pipelines. 
 
-He leads the clean energy group which develops 3D air pollution-climate models, writes differential equation solvers, and manufactures titanium plated air ballons. In his free time he bakes raspberry pi.
+With a strong background in software development and a keen interest in real estate, Ari brings a unique perspective to every project. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+He is always looking to take on new challenges and push the boundaries of what's possible. Ari's dedication and attention to detail make him a valuable asset to any team. Whether you're looking to build a new software application or optimize your existing pipelines, Ari is here to help.

@@ -122,7 +122,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 var email = emails[i];
                 var emailListItem = document.createElement('li');
 ```
-This code uses the chrome.tabs.query method to fetch the current tab's URL, and then uses the fetch method to retrieve the page's HTML. It then uses a extractEmails function to extract all email addresses from the HTML, and displays them in the popup by creating a new <li> element for each email and adding it to the email-list <ul>.
+This code uses the chrome.tabs.query method to fetch the current tab's URL, and then uses the fetch method to retrieve the page's HTML. It then uses a extractEmails function to extract all email addresses from the HTML, and displays them in the popup by creating a new li element for each email and adding it to the email-list ul.
 
 We can then further modify the extension by providing ChatGPT with more prompts. For example, we can ask ChatGPT to add a download button that allows the user to download the extracted emails as a CSV file:
 

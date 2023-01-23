@@ -1,5 +1,5 @@
 ---
-title: "Avoiding Common Pitfalls in Project Management with the Right Tools"
+title: "Avoiding Common Pitfalls in Project Management"
 date: '2022-12-01'
 tags: ['project management', 'pitfalls', 'solutions', 'tools']
 draft: false

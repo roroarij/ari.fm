@@ -1,451 +1,164 @@
 ---
-title: 'New features in v1'
-date: 2021-08-07T15:32:14Z
-lastmod: '2021-02-01'
-tags: ['next-js', 'tailwind', 'guide']
+title: Generating a Chrome Extension with ChatGPT
+date: '2021-12-01'
+tags: ['chrome extension', 'javascript', 'code generation']
 draft: false
-summary: 'An overview of the new features released in v1 - code block copy, multiple authors, frontmatter layout and more'
-layout: PostSimple
-bibliography: references-data.bib
-canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1/
+summary: Learn how to generate a chrome extension using OpenAI's ChatGPT model, and see the code that it produces.
+Creating a chrome extension can be a daunting task for those unfamiliar with web development. However, with the help of OpenAI's ChatGPT model, generating a chrome extension has never been easier. In this blog post, we will go over how to generate a chrome extension using ChatGPT, and see the code that it produces.
 ---
 
-## Overview
+## Introduction
+Chrome extensions are small programs that can modify and enhance the functionality of the Google Chrome browser. They are written in JavaScript and can be easily created by anyone with some basic web development knowledge. However, for those who are not familiar with web development, the process of creating a chrome extension can be overwhelming. This is where ChatGPT comes in.
 
-A post on the new features introduced in v1.0. New features:
+ChatGPT is a large language model trained by OpenAI that can generate code based on a given prompt. By using ChatGPT, anyone can generate a chrome extension without needing to have extensive knowledge of web development. In this blog post, we will go over how to generate a chrome extension using ChatGPT, and see the code that it produces.
 
-<TOCInline toc={props.toc} exclude="Overview" toHeading={2} />
+Generating a Chrome Extension with ChatGPT
+To generate a chrome extension using ChatGPT, we can provide it with a series of prompts that describe the functionality that we want the extension to have. In this example, we will generate a simple to-do extension.
 
-First load JS decreased from 43kB to 39kB despite all the new features added!^[With the new changes in Nextjs 12, first load JS increase to 45kB.]
+The first prompt we will use is to generate a basic project structure for a chrome extension written in JavaScript:
 
-See [upgrade guide](#upgrade-guide) below if you are migrating from v0 version of the template.
+```javascript
+MyExtension/
+    |- manifest.json
+    |- icon.png
+    |- popup/
+        |- index.html
+        |- script.js
+        |- style.css
+```
 
-## Theme colors
+ChatGPT will respond with the following code:
 
-You can easily modify the theme color by changing the primary attribute in the tailwind config file:
+```javascript
+MyExtension/
+    |- manifest.json
+    |- icon.png
+    |- popup/
+        |- index.html
+        |- script.js
+        |- style.css
+```
+This is the basic project structure for a chrome extension. The manifest.json file contains the configuration for the extension, such as the extension's name and permissions. The icon.png file is the icon that will be displayed in the chrome browser when the extension is installed. The popup directory contains the HTML, JavaScript, and CSS files that make up the extension's user interface.
 
-```js:tailwind.config.js
-theme: {
-    colors: {
-      primary: colors.teal,
-      gray: colors.neutral,
-      ...
+We can then continue to add functionality to the extension by providing ChatGPT with more prompts. For example, we can ask ChatGPT to add code that extracts emails from the current page and displays them to the user:
+
+```javascript
+Now help me fill those in with code for a simple to do extension.
+```
+```javascript
+// manifest.json
+{
+    "manifest_version": 2,
+    "name": "Email Extractor",
+    "description": "Extracts emails from the current page and displays them to the user",
+    "version": "1.0",
+    "permissions": ["activeTab"],
+    "browser_action": {
+        "default_popup": "popup/index.html",
+        "default_icon": "icon.png"
     }
-  ...
+}
+```
+ChatGPT will respond with the following code:
+```javascript
+<!-- popup/index.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Email Extractor</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <h1>Extracted Emails</h1>
+        <ul id="email-list"></ul>
+        <button id="download-csv">Download as CSV</button>
+        <script src="script.js"></script>
+    </body>
+</html>
+```
+```javascript
+/* popup/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+li img {
+    margin-right: 10px;
+    cursor: pointer;
 }
 ```
 
-The primary color attribute should be assigned an object with keys from 50, 100, 200 ... 900 and the corresponding color code values.
+```javascript
+// popup/script.js
+var emailList = document.getElementById('email-list');
+var emails = [];
 
-Tailwind includes great default color palettes that can be used for theming your own website. Check out [customizing colors documentation page](https://tailwindcss.com/docs/customizing-colors) for the full range of options.
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    var tab = tabs[0];
+    var tabUrl = tab.url;
 
-Migrating from v1? You can revert to the previous theme by setting `primary` to `colors.sky` (Tailwind 2.2.2 and above, otherwise `colors.lightBlue`) and changing gray to `colors.gray`.
+    // Fetch the page's HTML
+    fetch(tabUrl)
+        .then(response => response.text())
+        .then(html => {
+            // Extract all email addresses from the HTML
+            emails = extractEmails(html);
 
-From v1.1.2+, you can also customize the style of your code blocks easily by modifying the `css/prism.css` stylesheet. Token classnames are compatible with prismjs
-so you can copy and adapt token styles from a prismjs stylesheet e.g. [prism themes](https://github.com/PrismJS/prism-themes).
-
-## Xdm MDX compiler
-
-We switched the MDX bundler from [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote) to [mdx-bundler](https://github.com/kentcdodds/mdx-bundler).
-This uses [xdm](https://github.com/wooorm/xdm) under the hood, the latest micromark 3 and remark, rehype libraries.
-
-**Warning:** If you were using custom remark or rehype libraries, please upgrade to micromark 3 compatible ones. If you are upgrading, please delete `node_modules` and `package-lock.json` to avoid having past dependencies related issues.
-
-[xdm](https://github.com/wooorm/xdm) contains multiple improvements over [@mdx-js/mdx](https://github.com/mdx-js/mdx), the compiler used internally by next-mdx-remote, but there might be some breaking behaviour changes.
-Please check your markdown output to verify.
-
-Some new possibilities include loading components directly in the mdx file using the import syntax and including js code which could be compiled and bundled at the build step.
-
-For example, the following jsx snippet can be used directly in an MDX file to render the page title component:
-
-```jsx
-import PageTitle from './PageTitle.js'
-;<PageTitle> Using JSX components in MDX </PageTitle>
+            // Display the emails in the popup
+            for (var i = 0; i < emails.length; i++) {
+                var email = emails[i];
+                var emailListItem = document.createElement('li');
 ```
+This code uses the chrome.tabs.query method to fetch the current tab's URL, and then uses the fetch method to retrieve the page's HTML. It then uses a extractEmails function to extract all email addresses from the HTML, and displays them in the popup by creating a new <li> element for each email and adding it to the email-list <ul>.
 
-import PageTitle from './PageTitle.js'
+We can then further modify the extension by providing ChatGPT with more prompts. For example, we can ask ChatGPT to add a download button that allows the user to download the extracted emails as a CSV file:
 
-<PageTitle> Using JSX components in MDX </PageTitle>
-
-The default configuration resolves all components relative to the `components` directory.
-
-**Note**:
-Components which require external image loaders also require additional esbuild configuration.
-Components which are dependent on global application state on lifecycle like the Nextjs `Link` component would also not work with this setup as each mdx file is built independently.
-For such cases, it is better to use component substitution.
-
-## Table of contents component
-
-Inspired by [Docusaurus](https://docusaurus.io/docs/next/markdown-features/inline-toc) and Gatsby's [gatsby-remark-table-of-contents](https://www.gatsbyjs.com/plugins/gatsby-remark-table-of-contents/),
-the `toc` variable containing all the top level headings of the document is passed to the MDX file and can be styled accordingly.
-To make generating a table of contents (TOC) simple, you can use the existing `TOCInline` component.
-
-For example, the TOC in this post was generated with the following code:
-
-```jsx
-<TOCInline toc={props.toc} exclude="Overview" toHeading={2} />
+```javascript
+now modify that code so that the user has an option to download the extracted emails as a csv.
 ```
+ChatGPT will respond with the following code:
 
-You can customise the headings that are displayed by configuring the `fromHeading` and `toHeading` props, or exclude particular headings
-by passing a string or a string array to the `exclude` prop. By default, all headings that are of depth 3 or smaller are indented. This can be configured by changing the `indentDepth` property.
-A `asDisclosure` prop can be used to render the TOC within an expandable disclosure element.
+```javascript
+// popup/script.js
+var downloadCsvBtn = document.getElementById('download-csv');
 
-Here's the full TOC rendered in a disclosure element.
+downloadCsvBtn.addEventListener('click', function() {
+    // Convert emails array to CSV string
+    var csv = emails.join(',');
 
-```jsx
-<TOCInline toc={props.toc} asDisclosure />
+    // Create a hidden link and click it to trigger the download
+    var link = document.createElement('a');
+    link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    link.download = 'emails.csv';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
 ```
+This code adds a new button with the id 'download-csv' to the HTML. It then creates an event listener for this button that converts the emails array to a CSV string using the join method and creates a hidden link, with the href set to the CSV string and the download attribute set to "emails.csv". The script then appends this link to the body and simulates a click on it, triggering the download.
 
-<TOCInline toc={props.toc} asDisclosure />
+In this way, we can continue to add functionality to the extension by providing ChatGPT with more prompts. However, please keep in mind that, even though the ChatGPT model can generate code, it is not without its limitations, and may not cover all the edge cases or provide the optimal solution to a problem.
 
-## Layouts
-
-You can map mdx blog content to layout components by configuring the frontmatter field. For example, this post is written with the new `PostSimple` layout!
-
-### Adding new templates
-
-layout templates are stored in the `./layouts` folder. You can add your React components that you want to map to markdown content in this folder.
-The component file name must match that specified in the markdown frontmatter `layout` field.
-
-The only required field is `children` which contains the rendered MDX content, though you would probably want to pass in the frontMatter contents and render it in the template.
-
-You can configure the template to take in other fields - see `PostLayout` component for an example.
-
-Here's an example layout which you can further customise:
-
-```jsx
-export default function ExampleLayout({ frontMatter, children }) {
-  const { date, title } = frontMatter
-
-  return (
-    <SectionContainer>
-      <div>{date}</div>
-      <h1>{title}</h1>
-      <div>{children}</div>
-    </SectionContainer>
-  )
-}
-```
-
-### Configuring a blog post frontmatter
-
-Use the `layout` frontmatter field to specify the template you want to map the markdown post to. Here's how the frontmatter of this post looks like:
-
-```
----
-title: 'New features in v1'
-date: '2021-05-26   '
-tags: ['next-js', 'tailwind', 'guide']
-draft: false
-summary: 'Introducing the new layout features - you can map mdx blog content to layout components by configuring the frontmatter field'
-layout: PostSimple
----
-```
-
-You can configure the default layout in the respective page section by modifying the `DEFAULT_LAYOUT` variable.
-The `DEFAULT_LAYOUT` for blog posts page is set to `PostLayout`.
-
-### Extend
-
-`layout` is mapped to wrapper which wraps the entire MDX content.
-
-```jsx
-export const MDXComponents = {
-  Image,
-  a: CustomLink,
-  pre: Pre,
-  wrapper: ({ components, layout, ...rest }) => {
-    const Layout = require(`../layouts/${layout}`).default
-    return <Layout {...rest} />
-  },
-}
-
-export const MDXLayoutRenderer = ({ layout, mdxSource, ...rest }) => {
-  const MDXLayout = useMemo(() => getMDXComponent(mdxSource), [mdxSource])
-
-  return <MDXLayout layout={layout} components={MDXComponents} {...rest} />
-}
-```
-
-Use the `MDXLayoutRenderer` component on a page where you want to accept a layout name to map to the desired layout.
-You need to pass the layout name from the layout folder (it has to be an exact match).
-
-## Analytics
-
-The template now supports [plausible](https://plausible.io/), [simple analytics](https://simpleanalytics.com/) and google analytics.
-Configure `siteMetadata.js` with the settings that correspond with the desired analytics provider.
-
-```js
-analytics: {
-    // supports plausible, simpleAnalytics or googleAnalytics
-    plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
-    simpleAnalytics: false, // true or false
-    googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
-  },
-```
-
-Custom events are also supported. You can import the `logEvent` function from `@components/analytics/[ANALYTICS-PROVIDER]` file and call it when
-triggering certain events of interest. _Note_: Additional configuration might be required depending on the analytics provider, please check their official
-documentation for more information.
-
-## Blog comments system
-
-We have also added support for [giscus](https://github.com/laymonage/giscus), [utterances](https://github.com/utterance/utterances) or disqus.
-To enable, simply configure `siteMetadata.js` comments property with the desired provider and settings as specified in the config file.
-
-```js
-comment: {
-    // Select a provider and use the environment variables associated to it
-    // https://vercel.com/docs/environment-variables
-    provider: 'giscus', // supported providers: giscus, utterances, disqus
-    giscusConfig: {
-      // Visit the link below, and follow the steps in the 'configuration' section
-      // https://giscus.app/
-      repo: process.env.NEXT_PUBLIC_GISCUS_REPO,
-      repositoryId: process.env.NEXT_PUBLIC_GISCUS_REPOSITORY_ID,
-      category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY,
-      categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID,
-      mapping: 'pathname', // supported options: pathname, url, title
-      reactions: '1', // Emoji reactions: 1 = enable / 0 = disable
-      // Send discussion metadata periodically to the parent window: 1 = enable / 0 = disable
-      metadata: '0',
-      // theme example: light, dark, dark_dimmed, dark_high_contrast
-      // transparent_dark, preferred_color_scheme, custom
-      theme: 'light',
-      // theme when dark mode
-      darkTheme: 'transparent_dark',
-      // If the theme option above is set to 'custom`
-      // please provide a link below to your custom theme css file.
-      // example: https://giscus.app/themes/custom_example.css
-      themeURL: '',
-    },
-    utterancesConfig: {
-      // Visit the link below, and follow the steps in the 'configuration' section
-      // https://utteranc.es/
-      repo: process.env.NEXT_PUBLIC_UTTERANCES_REPO,
-      issueTerm: '', // supported options: pathname, url, title
-      label: '', // label (optional): Comment 💬
-      // theme example: github-light, github-dark, preferred-color-scheme
-      // github-dark-orange, icy-dark, dark-blue, photon-dark, boxy-light
-      theme: '',
-      // theme when dark mode
-      darkTheme: '',
-    },
-    disqus: {
-      // https://help.disqus.com/en/articles/1717111-what-s-a-shortname
-      shortname: process.env.NEXT_PUBLIC_DISQUS_SHORTNAME,
-    },
-  },
-```
-
-## Multiple authors
-
-Information on authors is now split from `siteMetadata.js` and stored in its own `data/authors` folder as a markdown file. Minimally, you will need to have a `default.md` file with authorship information. You can create additional files as required and the file name will be used as the reference to the author.
-
-Here's how an author markdown file might look like:
-
-```md:default.md
----
-name: Ari Rosenzweig
-avatar: /static/images/avatar.png
-occupation: Professor of Atmospheric Science
-company: Stanford University
-email: address@yoursite.com
-twitter: https://twitter.com/Twitter
-linkedin: https://www.linkedin.com/arirosenzweig
-github: https://github.com
----
-
-A long description of yourself...
-```
-
-You can use this information in multiple places across the template. For example in the about section of the page, we grab the default author information with this line of code:
-
-```js
-const authorDetails = await getFileBySlug('authors', ['default'])
-```
-
-This is rendered in the `AuthorLayout` template.
-
-### Multiple authors in blog post
-
-The frontmatter of a blog post accepts an optional `authors` array field. If no field is specified, it is assumed that the default author is used. Simply pass in an array of authors to render multiple authors associated with a post.
-
-For example, the following frontmatter will display the authors given by `data/authors/default.md` and `data/authors/sparrowhawk.md`
-
-```yaml
-title: 'My first post'
-date: '2021-01-12'
-draft: false
-summary: 'My first post'
-authors: ['default', 'sparrowhawk']
-```
-
-A demo of a multiple authors post is shown in [Introducing Tailwind Nextjs Starter Blog post](/blog/introducing-tailwind-nextjs-starter-blog).
-
-## Copy button for code blocks
-
-Hover over a code block and you will notice a GitHub-inspired copy button! You can modify `./components/Pre.js` to further customise it.
-The component is passed to `MDXComponents` and modifies all `<pre>` blocks.
-
-## Line highlighting and line numbers
-
-Line highlighting and line numbers are now supported out of the box thanks to the new [rehype-prism-plus plugin](https://github.com/timlrx/rehype-prism-plus)
-
-The following javascript code block:
-
-````
-```js {1, 3-4} showLineNumbers
-var num1, num2, sum
-num1 = prompt('Enter first number')
-num2 = prompt('Enter second number')
-sum = parseInt(num1) + parseInt(num2) // "+" means "add"
-alert('Sum = ' + sum) // "+" means combine into a string
-```
-````
-
-will appear as:
-
-```js {1,3-4} showLineNumbers
-var num1, num2, sum
-num1 = prompt('Enter first number')
-num2 = prompt('Enter second number')
-sum = parseInt(num1) + parseInt(num2) // "+" means "add"
-alert('Sum = ' + sum) // "+" means combine into a string
-```
-
-To modify the styles, change the following class selectors in the `prism.css` file:
-
-```css
-.code-highlight {
-  @apply float-left min-w-full;
-}
-
-.code-line {
-  @apply -mx-4 block border-l-4 border-opacity-0 pl-4 pr-4;
-}
-
-.code-line.inserted {
-  @apply bg-green-500 bg-opacity-20;
-}
-
-.code-line.deleted {
-  @apply bg-red-500 bg-opacity-20;
-}
-
-.highlight-line {
-  @apply -mx-4 border-l-4 border-primary-500 bg-gray-700 bg-opacity-50;
-}
-
-.line-number::before {
-  @apply mr-4 -ml-2 inline-block w-4 text-right text-gray-400;
-  content: attr(line);
-}
-```
-
-## Newletter component (v1.1.3)
-
-Introduced in v1.1.3, the newsletter component gives you an easy way to build an audience. It integrates with the following providers:
-
-- [Mailchimp](https://mailchimp.com/)
-- [Buttondown](https://buttondown.email/)
-- [Convertkit](https://convertkit.com/)
-
-To use it, specify the provider which you are using in the config file and add the necessary environment variables to the `.env` file.
-For more information on the required variables, check out `.env.sample.`
-
-Two components are exported, a default `NewsletterForm` and a `BlogNewsletterForm` component, which is also passed in as an MDX component
-and can be used in a blog post:
-
-```jsx
-<BlogNewsletterForm title="Like what you are reading?" />
-```
-
-<BlogNewsletterForm title="Like what you are reading?" />
-
-The component relies on nextjs's [API routes](https://nextjs.org/docs/api-routes/introduction) which requires a server-side instance of nextjs to be setup
-and is not compatible with a 100% static site export. Users should either self-host or use a compatible platform like Vercel or Netlify which supports this functionality.
-
-A static site compatible alternative is to substitute the route in the newsletter component with a form API endpoint provider.
-
-## Bibliography and Citations (v1.2.1)
-
-`rehype-citation` plugin is added to the xdm processing pipeline in v1.2.1. This allows you to easily format citations and insert bibliography from an existing bibtex or CSL-json file.
-
-For example, the following markdown code sample:
-
-```md
-Standard citation [@Nash1950]
-In-text citations e.g. @Nash1951
-Multiple citations [see @Nash1950; @Nash1951, page 50]
-
-**References:**
-
-[^ref]
-```
-
-is rendered to the following:
-
-Standard citation [@Nash1950]  
-In-text citations e.g. @Nash1951  
-Multiple citations [see @Nash1950; @Nash1951, page 50]
-
-**References:**
-
-[^ref]
-
-A bibliography will be inserted at the end of the document, but this can be overwritten by specifying a `[^Ref]` tag at the intended location.
-The plugin uses APA citation formation, but also supports the following CSLs, 'apa', 'vancouver', 'harvard1', 'chicago', 'mla', or a path to a user-specified CSL file.
-
-See [rehype-citation readme](https://github.com/timlrx/rehype-citation) for more information on the configuration options.
-
-## Self-hosted font (v1.5.0)
-
-Google font has been replaced with self-hosted font from [Fontsource](https://fontsource.org/). This gives the following [advantages](https://fontsource.org/docs/introduction):
-
-> Self-hosting brings significant performance gains as loading fonts from hosted services, such as Google Fonts, lead to an extra (render blocking) network request. To provide perspective, for simple websites it has been seen to double visual load times.
->
-> Fonts remain version locked. Google often pushes updates to their fonts without notice, which may interfere with your live production projects. Manage your fonts like any other NPM dependency.
->
-> Commit to privacy. Google does track the usage of their fonts and for those who are extremely privacy concerned, self-hosting is an alternative.
-
-This leads to a smaller font bundle and a 0.1s faster load time ([webpagetest comparison](https://www.webpagetest.org/video/compare.php?tests=220201_AiDcFH_f68a69b758454dd52d8e67493fdef7da,220201_BiDcMC_bf2d53f14483814ba61e794311dfa771)).
-
-To change the default Inter font:
-
-1. Install the preferred [font](https://fontsource.org/fonts) - `npm install -save @fontsource/<font-name>`
-2. Update the import at `pages/_app.js`- `import '@fontsource/<font-name>.css'`
-3. Update the `fontfamily` property in the tailwind css config file
-
-## Upgrade guide
-
-There are significant portions of the code that has been changed from v0 to v1 including support for layouts and a new mdx engine.
-
-There's also no real reason to change if the previous one serves your needs and it might be easier to copy
-the component changes you are interested in to your existing blog rather than migrating everything over.
-
-Nonetheless, if you want to do so and have not changed much of the template, you could clone the new version and copy over the blog post over to the new template.
-
-Another alternative would be to pull the latest template version with the following code:
-
-```bash
-git remote add template git@github.com:timlrx/tailwind-nextjs-starter-blog.git
-git pull template v1 --allow-unrelated-histories
-rm -rf node_modules
-```
-
-You can see an example of such a migration in this [commit](https://github.com/timlrx/timlrx.com/commit/bba1c185384fd6d5cdaac15abf802fdcff027286) for my personal blog.
-
-v1 also uses `feed.xml` rather than `index.xml`, to avoid some build issues with Vercel. If you are migrating you should add a redirect to `next.config.js` like so:
-
-```js
-async redirects() {
-  return [
-    {
-      source: '/:path/index.xml',
-      destination: '/:path/feed.xml',
-      permanent: true,
-    }
-  ]
-}
-```
+## Conclusion
+In this blog post, we have seen how to generate a chrome extension using ChatGPT, and the code that it produces. By providing ChatGPT with a series of prompts, we can quickly generate a basic project structure for a chrome extension and add functionality to it. However, it's important to note that the code generated by ChatGPT may not always be the best solution and it's important to manually review the code and test it before deploying it. Nevertheless, ChatGPT can be a great tool to quickly generate code and get started on a project.
